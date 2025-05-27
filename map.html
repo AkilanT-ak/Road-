@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Route Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map { height: 500px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h2>Risk Level: {{ risk }}</h2>
+    <h3>Weather: {{ weather }}</h3>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>
+
+    <script>
+        const map = L.map('map').setView([20.5937, 78.9629], 5);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+        const start = "{{ start }}";
+        const end = "{{ end }}";
+
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${start}`)
+            .then(res => res.json())
+            .then(startData => {
+                const startLat = parseFloat(startData[0].lat);
+                const startLon = parseFloat(startData[0].lon);
+
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${end}`)
+                    .then(res => res.json())
+                    .then(endData => {
+                        const endLat = parseFloat(endData[0].lat);
+                        const endLon = parseFloat(endData[0].lon);
+
+                        L.Routing.control({
+                            waypoints: [
+                                L.latLng(startLat, startLon),
+                                L.latLng(endLat, endLon)
+                            ],
+                            routeWhileDragging: false
+                        }).addTo(map);
+                    });
+            });
+    </script>
+</body>
+</html>
