@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accident Risk Prediction</title>
+</head>
+<body>
+    <h1>Enter Route Details</h1>
+    <form method="POST" action="/map">
+        <label>Start Location:</label>
+        <input type="text" name="start" required><br><br>
+        <label>Destination:</label>
+        <input type="text" name="end" required><br><br>
+        <label>Speed (km/hr):</label>
+        <input type="number" name="speed" required><br><br>
+        <button type="submit">Check Risk</button>
+    </form>
+</body>
+</html>
